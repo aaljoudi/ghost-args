@@ -13,12 +13,7 @@ Argument hints for Zsh, made by [Abdulrahman Aljoudi (@aaljoudi)](https://github
 
 </div>
 
-```text
-$ ./greet                 <name> <greeting>
-$ ./greet Alice           <greeting>
-$ ./greet Alice Hello
-Hello, Alice!
-```
+![Ghost Args automatically showing argument hints while typing](assets/demo.gif)
 
 Hints appear as dim ghost text as you type. They never become part of your command.
 
