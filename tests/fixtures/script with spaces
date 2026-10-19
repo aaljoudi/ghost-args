@@ -1,0 +1,4 @@
+#!/bin/zsh
+# ./script with spaces <one> <two>
+# Copyright (c) 2026 Abdulrahman Aljoudi (aaljoudi)
+# SPDX-License-Identifier: MIT

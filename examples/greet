@@ -1,0 +1,5 @@
+#!/bin/sh
+# ./greet <name> <greeting>
+# Copyright (c) 2026 Abdulrahman Aljoudi (aaljoudi)
+# SPDX-License-Identifier: MIT
+printf '%s, %s!\n' "${2:-Hello}" "${1:-world}"

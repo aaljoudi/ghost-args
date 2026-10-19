@@ -1,0 +1,26 @@
+name: Tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Zsh on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsh
+      - name: Syntax checks
+        run: |
+          sh -n install.sh
+          zsh -n script-arg-hints.zsh
+          zsh -n tests/run-tests.zsh
+      - name: Hint tests
+        run: zsh tests/run-tests.zsh
+      - name: Installation tests
+        run: sh tests/install-tests.sh
+      - name: Interactive terminal test
+        run: python3 tests/interactive-tests.py

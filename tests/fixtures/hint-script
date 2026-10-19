@@ -1,0 +1,4 @@
+#!/bin/zsh
+# ./hint-script <first> <second> <third>
+# Copyright (c) 2026 Abdulrahman Aljoudi (aaljoudi)
+# SPDX-License-Identifier: MIT
