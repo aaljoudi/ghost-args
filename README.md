@@ -20,7 +20,7 @@ Hints appear as dim ghost text as you type. They never become part of your comma
 ## ⚡ Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/aaljoudi/ghost-args/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/aaljoudi/ghost-args/a7e2dd3d0204eef00105dd1b335e7508e3a19321/install.sh | sh
 exec zsh
 ```
 
@@ -52,7 +52,7 @@ SCRIPT_ARG_HINT_STYLE='fg=cyan'  # default: fg=8 (gray)
 ## 🧹 Uninstall
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/aaljoudi/ghost-args/main/install.sh | sh -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/aaljoudi/ghost-args/a7e2dd3d0204eef00105dd1b335e7508e3a19321/install.sh | sh -s -- uninstall
 exec zsh
 ```
 
