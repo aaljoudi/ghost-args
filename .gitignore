@@ -6,3 +6,4 @@
 .env.*
 !.env.example
 *.ghost-args-backup.*
+.test-deps/

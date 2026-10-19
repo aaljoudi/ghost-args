@@ -92,8 +92,16 @@ region_highlight=('0 1 bold')
 _SCRIPT_ARG_HINT_LAST_TEXT=""
 _SCRIPT_ARG_HINT_LAST_HIGHLIGHT=""
 _script_arg_hint_update
-assert_equal ' other-plugin' "$POSTDISPLAY" 'does not overwrite another plugin POSTDISPLAY'
-assert_equal '0 1 bold' "$region_highlight[1]" 'preserves another plugin highlight'
+assert_equal ' <first> <second> <third>' "$POSTDISPLAY" 'usage hints take priority over another plugin display'
+assert_equal '0 1 bold' "$region_highlight[1]" 'preserves unrelated highlights'
+
+BUFFER='not-a-real-command-for-ghost-args'
+CURSOR=${#BUFFER}
+POSTDISPLAY=' other-plugin'
+_SCRIPT_ARG_HINT_LAST_TEXT=''
+_SCRIPT_ARG_HINT_LAST_HIGHLIGHT=''
+_script_arg_hint_update
+assert_equal ' other-plugin' "$POSTDISPLAY" 'preserves other suggestions for commands without usage hints'
 
 update_for "$script"
 typeset own_highlight=$_SCRIPT_ARG_HINT_LAST_HIGHLIGHT

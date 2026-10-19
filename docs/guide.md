@@ -64,14 +64,14 @@ To remove a quick installation offline, delete the `# >>> ghost-args >>>` throug
 - In a pipeline or `&&`/`||` list, hints follow the simple command at the cursor.
 - Arguments advance as soon as you begin typing a value. Hints do not validate values or make arguments required.
 - Usage metadata is positional: each whitespace-separated word after the documented command counts as an argument. Options, optional groups, variadic arguments, shell functions, aliases, interpreter prefixes such as `python script.py`, and full shell grammar are not modeled.
-- Existing ghost text from another plugin takes priority. For example, an autosuggestion can temporarily hide these hints.
+- Usage hints take priority over history suggestions for documented scripts. With `zsh-autosuggestions`, hints refresh after asynchronous responses and cannot be accepted into the command with arrow keys. Other commands retain normal history suggestions.
 - No network calls or telemetry occur while typing. Local usage comments are read without executing scripts or evaluating substitutions. Comments containing terminal control characters are ignored.
 
 ## Troubleshooting
 
 **No hints:** start a new Zsh session, confirm the plugin source line is present in your active `.zshrc`, run `chmod +x` on your script, and check that the usage comment is exactly on line 2 and names the same script. A script without usage metadata intentionally shows no hint.
 
-**Hints disappear:** move the cursor to the end of the line. Another plugin may be using Zsh's shared ghost-text area.
+**Hints disappear:** move the cursor to the end of the line. After updating, start a new session with `exec zsh` to reload the plugin.
 
 **Custom dotfiles:** set `GHOST_ARGS_ZSHRC` when installing if your configuration loads a different startup file. The installer respects `ZDOTDIR` and preserves startup-file symlinks.
 

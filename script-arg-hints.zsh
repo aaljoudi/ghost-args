@@ -77,10 +77,6 @@ _script_arg_hint_update() {
     # If the cursor is in the middle of the command, don't show a hint.
     (( CURSOR == ${#BUFFER} )) || return 0
 
-    # POSTDISPLAY is shared ZLE state.  If another widget owns it, leave it
-    # alone instead of replacing its text with ours.
-    [[ -z "$POSTDISPLAY" ]] || return 0
-
     # Parse the current command line using zsh's shell-word lexer. Quoted
     # strings count as one argument, and operators remain distinguishable from
     # quoted operator characters.
@@ -221,6 +217,11 @@ _script_arg_hint_update() {
 
     local hint=" ${(j: :)remaining}"
 
+    # Usage hints take priority over history suggestions for this command only.
+    # Remove the autosuggestion's highlight before taking over shared display.
+    if (( $+functions[_zsh_autosuggest_highlight_reset] )); then
+        _zsh_autosuggest_highlight_reset
+    fi
     POSTDISPLAY="$hint"
     _SCRIPT_ARG_HINT_LAST_TEXT="$hint"
 
@@ -234,10 +235,43 @@ _script_arg_hint_update() {
     return 0
 }
 
+# zsh-autosuggestions can redraw asynchronously, without running the normal
+# pre-redraw hook. Its public widgets must refresh hints after their response,
+# and must never mistake our documentation for an accept-able history value.
+_script_arg_hint_autosuggest_widget() {
+    _script_arg_hint_clear
+    "_script_arg_hint_original${funcstack[1]}" "$@"
+    local -i hint_widget_status=$?
+    _script_arg_hint_update
+    # Async suggestion responses need their own refresh; ordinary keystrokes
+    # are redrawn by ZLE after the widget returns.
+    if [[ ${funcstack[1]} == _zsh_autosuggest_widget_suggest ]]; then
+        zle -R
+    fi
+    return $hint_widget_status
+}
+
+_script_arg_hint_setup_autosuggestions() {
+    emulate -L zsh
+    local action widget_function
+    for action in modify suggest accept partial_accept execute clear; do
+        widget_function="_zsh_autosuggest_widget_$action"
+        (( $+functions[$widget_function] )) || continue
+        # Function copies preserve the plugin's existing implementation and
+        # avoid nested wrappers when .zshrc is sourced more than once.
+        if [[ "$functions[$widget_function]" != "$functions[_script_arg_hint_autosuggest_widget]" ]]; then
+            functions[_script_arg_hint_original${widget_function}]="$functions[$widget_function]"
+            functions[$widget_function]="$functions[_script_arg_hint_autosuggest_widget]"
+        fi
+    done
+}
+
 # Register the updater with ZLE's redraw hook.
 if [[ -o interactive ]]; then
     zmodload zsh/zle
-    autoload -Uz add-zle-hook-widget
+    autoload -Uz add-zsh-hook add-zle-hook-widget
+    _script_arg_hint_setup_autosuggestions
+    add-zsh-hook precmd _script_arg_hint_setup_autosuggestions
     add-zle-hook-widget -d line-pre-redraw _script_arg_hint_update 2>/dev/null
     add-zle-hook-widget line-pre-redraw _script_arg_hint_update
     add-zle-hook-widget -d line-finish _script_arg_hint_clear 2>/dev/null

@@ -61,7 +61,7 @@ curl -fsSL https://raw.githubusercontent.com/aaljoudi/ghost-args/main/install.sh
 exec zsh
 ```
 
-**No hints?** Check that you're in Zsh, the script is executable, and line 2 names the same script. Keep the cursor at the end; another plugin's ghost text takes priority.
+**No hints?** Check that you're in Zsh, the script is executable, and line 2 names the same script. Keep the cursor at the end. Usage hints appear automatically, including with `zsh-autosuggestions`.
 
 ---
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Refresh hints automatically alongside `zsh-autosuggestions`, including asynchronous responses and matching command history.
+- Prevent suggestion acceptance from inserting argument placeholders into commands.
+- Add interactive regression coverage for both plugin load orders.
+
 ## 0.1.0
 
 - Show positional argument hints from an executable script's second-line usage comment.

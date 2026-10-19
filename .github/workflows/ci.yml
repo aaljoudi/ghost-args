@@ -24,3 +24,14 @@ jobs:
         run: sh tests/install-tests.sh
       - name: Interactive terminal test
         run: python3 tests/interactive-tests.py
+      - name: Check out autosuggestions for compatibility tests
+        uses: actions/checkout@v4
+        with:
+          repository: zsh-users/zsh-autosuggestions
+          ref: v0.7.1
+          path: .test-deps/zsh-autosuggestions
+          persist-credentials: false
+      - name: Test automatic hints alongside autosuggestions
+        run: |
+          python3 tests/interactive-tests.py --autosuggestions .test-deps/zsh-autosuggestions/zsh-autosuggestions.zsh
+          python3 tests/interactive-tests.py --autosuggestions .test-deps/zsh-autosuggestions/zsh-autosuggestions.zsh --plugin-first
